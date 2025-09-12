@@ -1,3 +1,4 @@
+import json
 from tkinter import *
 from tkinter import messagebox
 from random import randint, shuffle, choice
@@ -26,18 +27,47 @@ def save():
     password = password_entry.get()
     web = web_entry.get()
     email = email_entry.get()
+    new_data = {
+        web:{
+            "email": email,
+            "password": password,
+        }
+    }
     if len(password) == 0 or len(web) == 0:
         messagebox.showinfo(title="Opps", message="Please don`t leave fields empty")
     else:
-        is_ok = messagebox.askokcancel(title="Message", message=f"Email = {email} \n password: {password} \nIs it ok to save?")
-        if is_ok:
-            with open("data.txt", "a") as f:
-                f.write(f"{web} | {email} | {password}\n")
-                password_entry.delete(0, END)
-                web_entry.delete(0, END)
+        try:
+            with open("data.json", "r") as f:
+                # reading old data
+                data = json.load(f)
+                # update old data with new data
+                data.update(new_data)
+            with open("data.json", "w") as f:
+                # saving updated data
+                json.dump(data, f, indent=4)
+        except FileNotFoundError:
+            with open("data.json", "w") as f:
+                json.dump(new_data, f, indent=4)
+        finally:
+            password_entry.delete(0, END)
+            web_entry.delete(0, END)
+
+# ---------------------------- FIND PASSWORD ------------------------------- #
+
+def find_password():
+    web = web_entry.get()
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="That data file doesn`t exist")
+    else:
+        if web in data:
+            messagebox.showinfo(title=web, message=f"Email: {data[web]["email"]} \n password: {data[web]["password"]}")
+        else:
+            messagebox.showinfo(title="Error", message= f"No details for the {web} exists")
 
 # ---------------------------- UI SETUP ------------------------------- #
-
 
 window = Tk()
 window.title('Password Manager')
@@ -59,7 +89,7 @@ password_label.grid(column=0, row=3)
 
 # Entries
 web_entry = Entry(width=35)
-web_entry.grid(column=1, row=1, columnspan=2, sticky="EW")
+web_entry.grid(column=1, row=1, sticky="EW")
 web_entry.focus()
 email_entry = Entry(width=35)
 email_entry.grid(column=1, row=2, columnspan=2, sticky="EW")
@@ -72,5 +102,7 @@ gen_button = Button(text="Generate Password", command=generate_password)
 gen_button.grid(column=2, row=3, sticky="EW")
 add_button = Button(text="Add", width=36, command= save)
 add_button.grid(column=1, row=4, columnspan=2, sticky="EW")
+search_button = Button(text="Search", command=find_password)
+search_button.grid(column=2, row=1, sticky="EW")
 
 window.mainloop()
