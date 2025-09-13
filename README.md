@@ -1,6 +1,7 @@
 # 🔐 Password Manager
 
-A simple password manager built with Python. This tool helps generate and store passwords securely, making it easier to keep track of multiple accounts.
+A simple password manager built with Python.  
+Part of my learning journey in the *100 Days of Code: The Complete Python Pro Bootcamp*.
 
 ---
 
@@ -8,17 +9,16 @@ A simple password manager built with Python. This tool helps generate and store 
 
 | File | Purpose |
 |------|---------|
-| `main.py` | The main script where the program logic lives: generating passwords, saving credentials, and retrieving them. |
-| `data.txt` | File used to store saved credentials (usernames, website names, passwords). |
-| `logo.png` | Logo image displayed (if using GUI or just for branding purposes). |
+| `main.py` | The main script: generates passwords, saves credentials, and allows retrieval by website/email. |
+| `data.json` | Stores saved credentials (website, username/email, password) persistently in JSON format. |
+| `logo.png` | Logo/image for branding or visualization (if used when running the app). |
 
 ---
 
 ## 🚀 Features
 
-- Generate a secure random password.  
-- Save credentials (website, username/email, password).  
-- Read saved credentials from file.  
-- Simple and clean UI (if implemented).  
-
+- Generate a strong, random password  
+- Save credentials (website, username/email, password) into `data.json`  
+- Retrieve credentials for a given site/email  
+- Clean and simple interface
 
